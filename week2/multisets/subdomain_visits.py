@@ -6,22 +6,15 @@ class Solution(object):
         """
         visits = {}
 
-        # Add all complete domains to visits
         for domain in cpdomains:
-            cp = domain.split()
-            visits[cp[1]] = visits.get(cp[1],0) + int(cp[0])
+            count, dom = domain.split()
 
-        # Iterate through visits and break up
-        for dom in visits.keys():
+            # split upt domain and work through it from right to left
             domains = dom.split('.')
-            #print dom
-            #print visits[dom]
-            sub_dom = '.'.join(domains[1:])
-            #print sub_dom
-            visits[sub_dom] = visits.get(sub_dom, 0) + visits[dom]
-            #print visits[sub_dom]
-            if len(domains) > 2:
-                sub_dom = '.'.join(domains[2:])
-                visits[sub_dom] = visits.get(sub_dom, 0) + visits[dom]
+            for i in reversed(range(len(domains))):
+                sub_dom = '.'.join(domains[i:])
+
+                visits[sub_dom] = visits.get(sub_dom, 0) + int(count)
 
         return [(str(visits[domain]) + " " + domain) for domain in visits]
+            
