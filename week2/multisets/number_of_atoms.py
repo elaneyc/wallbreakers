@@ -8,7 +8,10 @@ class Solution(object):
         atom_counts = {}
 
         # Use stack to track which count there is
+        # Use dictionary to keep track of coef distribution in parens
         stack = []
+        atoms_in_parens = {}
+        parens = []
 
         # To keep track of the current atom/count
         atom = []
@@ -16,7 +19,9 @@ class Solution(object):
 
         length = len(formula)
 
+        # to keep track of what came before
         num_prev = False
+        seen_closing = False
 
         # Go through formula, back to front
         for i in range(len(formula)-1, -1, -1):
@@ -48,11 +53,14 @@ class Solution(object):
                     else:
                         # If character is uppercase, it is an atom
                         atom.insert(0, cur)
+                        a = ''.join(atom)
+
+                        if len(parens) > 0:
+                            atoms_in_parens[a] = 0
+
                         if num_prev:
-                            a = ''.join(atom)
                             atom_counts[a] = atom_counts.get(a, 0) + stack.pop()
                         else:
-                            a = ''.join(atom)
                             atom_counts[a] = atom_counts.get(a, 0) + 1
 
                         # Reset atom
@@ -60,11 +68,16 @@ class Solution(object):
                         num_prev = False
             elif cur == ')':
                 num_prev = False
+                parens.append(')')
             elif cur == '(':
+                parens.pop()
                 if len(stack) > 0:
                     coef = stack.pop()
                     for a in atom_counts:
-                        atom_counts[a] = atom_counts[a]*coef
+                        if a in atoms_in_parens:
+                            atom_counts[a] = atom_counts[a]*coef
+                    if len(parens) == 0:
+                        atoms_in_parens = {}
 
 
         return ''.join([(a + str(count)) if count != 1 else a for a, count in sorted(atom_counts.items())])
