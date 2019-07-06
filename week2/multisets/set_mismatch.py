@@ -18,7 +18,7 @@ class Solution(object):
 
 
         if len(result) == 1:
-            # Case if missing number is at the end or beginning
+            # Case if missing number is at the end or the beginning
             if nums[-1] != len(nums):
                 result.append(len(nums))
             elif nums[0] != 1:
