@@ -4,30 +4,27 @@ class Solution(object):
         :type bills: List[int]
         :rtype: bool
         """
-        change = {}
+        fives = 0
+        tens = 0
 
         for b in bills:
-            difference = b - 5
-
-            # Check if there is enough change
-            while difference > 0:
-                if difference >= 10:
-                    if change.get(10, 0) < 1 and change.get(5, 0) < 2:
-                        return False
-                    else:
-                        if change.get(10, 0) > 0:
-                            change[10] -= 1
-                        else:
-                            change[5] -= 2
-                        difference -= 10
-                elif difference == 5:
-                    if change.get(5, 0) < 1:
-                        return False
-                    else:
-                        change[5] -= 1
-                        difference -= 5
-
-            # Add the bill to the cashbox
-            change[b] = change.get(b, 0) + 1
-
+            if b == 5:
+                fives += 1
+            elif b == 10:
+                if fives >= 1:
+                    fives -= 1
+                    tens += 1
+                else:
+                    return False
+            elif b == 20:
+                if tens >= 1 and fives >= 1:
+                    tens -= 1
+                    fives -= 1
+                elif fives >= 3:
+                    fives -= 3
+                else:
+                    return False
         return True
+
+
+                
