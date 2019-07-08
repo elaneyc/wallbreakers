@@ -16,7 +16,6 @@ class Solution(object):
             # If end is greater than beginning or end coords, then overlaps
             if points[i][1] <= end:
                 overlaps += 1
-                #start = points[i][0]
                 end = points[i][1]
             elif points[i][0] <= end:
                 overlaps += 1
